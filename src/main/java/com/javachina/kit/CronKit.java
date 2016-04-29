@@ -43,7 +43,7 @@ public class CronKit {
             if (!backupath.exists()) {  
                 backupath.mkdir();  
             }  
-            StringBuffer sb = new StringBuffer();  
+            StringBuilder sb = new StringBuilder();  
             sb.append(mysqlpaths);  
             sb.append("mysqldump ");  
             sb.append("--opt ");  
