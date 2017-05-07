@@ -64,29 +64,44 @@ public class MemberController extends BaseController {
     @Inject
     private FavoriteService favoriteService;
 
+    @Inject
+    private RemindService remindService;
+
     private Patchca patchca = new DefaultPatchca();
 
     /**
      * 通知列表
      */
-    @Route(value = "/notices", method = HttpMethod.GET)
-    public ModelAndView notices(Request request, Response response,
+    @Route(value = "/reminds", method = HttpMethod.GET)
+    @Access
+    public ModelAndView reminds(Request request,
                                 @QueryParam(defaultValue = "1", value = "page") Integer page,
                                 @QueryParam(defaultValue = "15", value = "limit") Integer limit) {
 
-        LoginUser user = SessionKit.getLoginUser();
-        if (null == user) {
-            response.go("/signin");
-            return null;
-        }
+        Paginator<Remind> remindPaginator = remindService.getReminds(getUsername(), page, limit);
+        request.attribute("remindPage", remindPaginator);
 
-        return this.getView("notices");
+        return this.getView("reminds");
+    }
+
+    /**
+     * 清除我的未读
+     *
+     * @return
+     */
+    @Route(value = "/reminds/clean", method = HttpMethod.POST)
+    @JSON
+    @Access
+    public RestResponse cleanReminds() {
+        remindService.readReminds(getUsername());
+        return RestResponse.ok();
     }
 
     /**
      * 修改新密码
      */
     @Route(value = "/reset_pwd", method = HttpMethod.POST)
+    @Access
     public ModelAndView reset_pwd(Request request, @QueryParam String code,
                                   @QueryParam String password,
                                   @QueryParam String re_password) {
@@ -156,7 +171,7 @@ public class MemberController extends BaseController {
                                Request request, Response response) {
 
         Take up = new Take(User.class);
-        up.eq("status", 1).eq("login_name", username);
+        up.eq("status", 1).eq("username", username);
 
         User user = userService.getUserByTake(up);
         if (null == user) {
@@ -180,14 +195,14 @@ public class MemberController extends BaseController {
 
         // 最新创建的主题
         Take tp = new Take(Topic.class);
-        tp.eq("status", 1).eq("uid", user.getUid()).orderby("created desc, updated desc").page(1, 10);
+        tp.eq("status", 1).eq("username", user.getUsername()).orderby("created desc, updated desc").page(1, 10);
         Paginator<Map<String, Object>> topicPage = topicService.getPageList(tp);
         request.attribute("topicPage", topicPage);
 
         // 最新发布的回复
         Take cp = new Take(Comment.class);
-        cp.eq("uid", user.getUid()).orderby("created desc").page(1, 10);
-        Paginator<Map<String, Object>> commentPage = null;//commentService.getPageListMap(cp);
+        cp.eq("author", user.getUsername()).orderby("created desc").page(1, 10);
+        Paginator<Map<String, Object>> commentPage = commentService.getPages(cp);
         request.attribute("commentPage", commentPage);
 
         return this.getView("member_detail");

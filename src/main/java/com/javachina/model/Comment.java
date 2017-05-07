@@ -1,6 +1,7 @@
 package com.javachina.model;
 
 import com.blade.jdbc.annotation.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,13 +15,13 @@ import java.io.Serializable;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Comment implements Serializable {
 
     private Integer cid;
-    private Integer author_id;
-    private Integer owner_id;
     private String tid;
     private String author;
+    private String owner;
     private String content;
     private String ip;
     private String agent;

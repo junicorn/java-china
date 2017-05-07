@@ -13,14 +13,14 @@ public class MailKit {
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-    public static void sendForgot(String login_name, String email, String code) {
+    public static void sendForgot(String username, String email, String code) {
 
     }
 
-    public static void sendSignup(String login_name, String to_addr, String code) {
+    public static void sendSignup(String username, String to_addr, String code) {
         String url = Constant.SITE_URL + "/active/" + code;
         String content = "您的激活链接是：<a href='" + url + "'>" + url + "</a> 点击链接激活账号！";
-        send(login_name + ", 欢迎你加入" + Constant.MAIL_USERNAME, to_addr, content);
+        send(username + ", 欢迎你加入" + Constant.MAIL_USERNAME, to_addr, content);
     }
 
     public static void send(final String subject, final String to_addr, final String content) {

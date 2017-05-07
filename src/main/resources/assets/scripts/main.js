@@ -193,7 +193,7 @@ $('.topic-footer .deltopic').on('click', function () {
     jc.alertConfirm({
         title: '确定删除该帖子吗?',
         then: function () {
-            tale.post({
+            jc.post({
                 url: '/topic/delete',
                 data: {tid: tid},
                 success: function (result) {

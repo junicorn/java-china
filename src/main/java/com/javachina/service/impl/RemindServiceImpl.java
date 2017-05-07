@@ -6,6 +6,7 @@ import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.model.PageRow;
 import com.blade.jdbc.model.Paginator;
 import com.blade.kit.DateKit;
+import com.blade.kit.StringKit;
 import com.javachina.exception.TipException;
 import com.javachina.model.Remind;
 import com.javachina.service.RemindService;
@@ -31,15 +32,14 @@ public class RemindServiceImpl implements RemindService {
     }
 
     @Override
-    public Integer unreads(Integer uid) {
-        if (null == uid) {
-            return 0;
-        }
-        return null;
+    public Paginator<Remind> getReminds(String username, int page, int limit) {
+        return activeRecord.page(Remind.builder().to_user(username).build(), new PageRow(page, limit, "created desc"));
     }
 
     @Override
-    public Paginator<Remind> getNotices(Integer uid, int page, int limit) {
-        return activeRecord.page(Remind.builder().to_uid(uid).build(), new PageRow(page, limit, "created desc"));
+    public void readReminds(String username) {
+        if (StringKit.isNotBlank(username)) {
+            activeRecord.execute("update t_remind set is_read = 1 where to_user = ? and is_read = 0", username);
+        }
     }
 }

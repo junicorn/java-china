@@ -7,7 +7,7 @@ import com.blade.kit.json.JSONKit;
 import com.blade.mvc.http.Request;
 import com.javachina.constants.Constant;
 import com.javachina.ext.Commons;
-import com.javachina.ext.Funcs;
+import com.javachina.ext.TplFunctions;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.node.Node;
@@ -154,7 +154,7 @@ public class Utils {
         HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
         String content = renderer.render(document);
 
-        String member = Funcs.base_url("/member/");
+        String member = TplFunctions.base_url("/member/");
         content = content.replaceAll("@([a-zA-Z_0-9-]+)\\s", "<a href='" + member + "$1'>@$1</a>&nbsp;");
 
         content = Commons.emoji(content);

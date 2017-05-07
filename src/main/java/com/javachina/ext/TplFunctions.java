@@ -1,10 +1,20 @@
 package com.javachina.ext;
 
+import com.blade.jdbc.ActiveRecord;
 import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.javachina.constants.Constant;
+import com.javachina.dto.LoginUser;
+import com.javachina.kit.SessionKit;
+import com.javachina.model.Remind;
 
-public class Funcs {
+public class TplFunctions {
+
+    private static ActiveRecord activeRecord;
+
+    public static void setActiveRecord(ActiveRecord ar) {
+        activeRecord = ar;
+    }
 
     /**
      * 获取相对路径
@@ -122,4 +132,16 @@ public class Funcs {
         return r;
     }
 
+    /**
+     * 读取我的未读
+     *
+     * @return
+     */
+    public static int unreads() {
+        LoginUser loginUser = SessionKit.getLoginUser();
+        if (null != loginUser) {
+            return activeRecord.count(Remind.builder().to_user(loginUser.getUsername()).is_read(false).build());
+        }
+        return 0;
+    }
 }

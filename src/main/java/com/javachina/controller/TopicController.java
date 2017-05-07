@@ -79,7 +79,7 @@ public class TopicController extends BaseController {
             return this.getView("info");
         }
 
-        if (!topic.getUid().equals(getUid())) {
+        if (!topic.getUsername().equals(getLoginUser().getUsername())) {
             request.attribute(this.ERROR, "您无权限编辑该帖");
             return this.getView("info");
         }
@@ -119,7 +119,7 @@ public class TopicController extends BaseController {
         }
 
         // 无权限操作
-        if (!topic.getUid().equals(getUid())) {
+        if (!topic.getUsername().equals(getLoginUser().getUsername())) {
             return RestResponse.fail("无权限操作该帖");
         }
 
@@ -144,7 +144,7 @@ public class TopicController extends BaseController {
             return RestResponse.fail("内容太长了，试试少吐点口水");
         }
 
-        Integer last_time = topicService.getLastUpdateTime(getUid());
+        Integer last_time = topicService.getLastUpdateTime(getUsername());
         if (null != last_time && (DateKit.getCurrentUnixTime() - last_time) < 10) {
             return RestResponse.fail("您操作频率太快，过一会儿操作吧！");
         }
@@ -192,7 +192,7 @@ public class TopicController extends BaseController {
 
         Integer uid = getUid();
 
-        Integer last_time = topicService.getLastCreateTime(uid);
+        Integer last_time = topicService.getLastCreateTime(getUsername());
         if (null != last_time && (DateKit.getCurrentUnixTime() - last_time) < 10) {
             return RestResponse.fail("您操作频率太快，过一会儿操作吧！");
         }
@@ -203,7 +203,7 @@ public class TopicController extends BaseController {
         // 发布帖子
         try {
             Topic topic = new Topic();
-            topic.setUid(uid);
+            topic.setUsername(getLoginUser().getUsername());
             topic.setNid(nid);
             topic.setTitle(title);
             topic.setContent(content);
@@ -262,8 +262,8 @@ public class TopicController extends BaseController {
         request.attribute("is_love", is_love);
 
         Take cp = new Take(Comment.class);
-        cp.and("tid", topic.getTid()).asc("cid").page(page, 20);
-        Paginator<Map<String, Object>> commentPage = null;//commentService.getPageListMap(cp);
+        cp.eq("tid", topic.getTid()).asc("cid").page(page, 20);
+        Paginator<Map<String, Object>> commentPage = commentService.getPages(cp);
         request.attribute("commentPage", commentPage);
     }
 
@@ -294,9 +294,12 @@ public class TopicController extends BaseController {
 
             Integer uid = getUid();
 
-            Comment comment = Comment.builder().author_id(uid).author(getLoginUser().getUsername())
-                    .owner_id(topic.getUid())
-                    .content(content).agent(request.userAgent()).build();
+            Comment comment = Comment.builder()
+                    .tid(tid)
+                    .author(getLoginUser().getUsername())
+                    .owner(topic.getUsername())
+                    .content(content)
+                    .agent(request.userAgent()).ip(request.address()).build();
 
             topicService.comment(comment, topic.getTitle());
             Constant.SYS_INFO = optionsService.getSystemInfo();

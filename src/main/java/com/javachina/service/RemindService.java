@@ -17,21 +17,14 @@ public interface RemindService {
     void saveRemind(Remind remind);
 
     /**
-     * 读取uid的未读提醒
+     * 分页读取我的提醒
      *
-     * @param uid
-     * @return
-     */
-    Integer unreads(Integer uid);
-
-    /**
-     * 读取我的提醒
-     *
-     * @param uid
+     * @param username
      * @param page
      * @param limit
      * @return
      */
-    Paginator<Remind> getNotices(Integer uid, int page, int limit);
+    Paginator<Remind> getReminds(String username, int page, int limit);
 
+    void readReminds(String username);
 }

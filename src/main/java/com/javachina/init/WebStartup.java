@@ -11,12 +11,10 @@ import com.blade.kit.base.Config;
 import com.blade.mvc.view.ViewSettings;
 import com.blade.mvc.view.template.JetbrickTemplateEngine;
 import com.javachina.constants.Constant;
-import com.javachina.ext.Funcs;
+import com.javachina.ext.TplFunctions;
 import jetbrick.template.JetGlobalContext;
 import jetbrick.template.resolver.GlobalResolver;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
@@ -34,7 +32,7 @@ public class WebStartup implements BeanProcessor, WebContextListener {
         JetbrickTemplateEngine templateEngine = new JetbrickTemplateEngine();
         JetGlobalContext context = templateEngine.getGlobalContext();
         GlobalResolver resolver = templateEngine.getGlobalResolver();
-        resolver.registerFunctions(Funcs.class);
+        resolver.registerFunctions(TplFunctions.class);
 
         Config config = bConfig.config();
         String version = config.get("app.version", "1.0");
@@ -77,6 +75,7 @@ public class WebStartup implements BeanProcessor, WebContextListener {
             DataSource dataSource = DruidDataSourceFactory.createDataSource(props);
             ActiveRecord activeRecord = new SampleActiveRecord(dataSource);
             ioc.addBean(activeRecord);
+            TplFunctions.setActiveRecord(activeRecord);
         } catch (Exception ex) {
             log.error("初始化数据库配置失败", ex);
         }

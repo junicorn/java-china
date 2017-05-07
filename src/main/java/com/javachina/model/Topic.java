@@ -19,7 +19,7 @@ public class Topic implements Serializable {
     private String tid;
 
     //发布人
-    private Integer uid;
+    private String username;
 
     //所属节点
     private Integer nid;

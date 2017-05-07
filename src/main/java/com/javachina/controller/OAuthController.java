@@ -86,7 +86,7 @@ public class OAuthController extends BaseController {
             Openid openid = openIdService.getOpenid(EventType.GITHUB, open_id);
             if (null == openid) {
                 Map<String, String> githubInfo = new HashMap<String, String>(3);
-                githubInfo.put("login_name", login);
+                githubInfo.put("username", login);
                 githubInfo.put("open_id", open_id.toString());
 
                 SessionKit.set(request.session(), EventType.GITHUB, githubInfo);

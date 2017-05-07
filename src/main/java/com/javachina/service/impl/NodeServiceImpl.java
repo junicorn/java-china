@@ -9,7 +9,7 @@ import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.javachina.dto.NodeTree;
 import com.javachina.exception.TipException;
-import com.javachina.ext.Funcs;
+import com.javachina.ext.TplFunctions;
 import com.javachina.model.Node;
 import com.javachina.service.NodeService;
 
@@ -167,7 +167,7 @@ public class NodeServiceImpl implements NodeService {
             map.put("childs", childs);
             map.put("description", node.getDescription());
             if (StringKit.isNotBlank(node.getThumb_img())) {
-                String pic = Funcs.avatar_url(node.getThumb_img());
+                String pic = TplFunctions.avatar_url(node.getThumb_img());
                 map.put("pic", pic);
             }
         }

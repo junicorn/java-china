@@ -90,7 +90,7 @@ public interface TopicService {
      * @param uid
      * @return
      */
-    Integer getTopics(Integer uid);
+    Integer getTopics(String username);
 
     /**
      * 获取用户最后一次发布帖子时间
@@ -98,7 +98,7 @@ public interface TopicService {
      * @param uid
      * @return
      */
-    Integer getLastCreateTime(Integer uid);
+    Integer getLastCreateTime(String username);
 
     /**
      * 获取用户最后一次更新帖子时间
@@ -106,7 +106,7 @@ public interface TopicService {
      * @param uid
      * @return
      */
-    Integer getLastUpdateTime(Integer uid);
+    Integer getLastUpdateTime(String username);
 
     /**
      * 设置精华帖

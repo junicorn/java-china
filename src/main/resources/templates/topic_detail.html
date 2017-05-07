@@ -102,28 +102,28 @@
                                class="pull-right text-muted at-user">
                                 <i class="fa fa-mail-forward"></i> #${for.index}
                             </a>
-                            <a class="media-left" href="${base_url('/member/') + comment.reply_name}">
-                                <img class="avatar avatar-sm img-circle" src="${comment.reply_avatar}"
-                                     alt="${comment.reply_name}">
+                            <a class="media-left" href="${base_url('/member/') + comment.author}">
+                                <img class="avatar avatar-sm img-circle" src="${avatar_url(comment.reply_avatar)}"
+                                     alt="${comment.author}">
                             </a>
                             <div class="media-body">
                                 <h4 class="media-heading topic-list-heading">
-                                    <a href="${base_url('/member/') + comment.reply_name}">
-                                        ${comment.reply_name}
+                                    <a href="${base_url('/member/') + comment.author}">
+                                        ${comment.author}
                                         #if(comment.role_id <= 3)
                                         &nbsp;<i class="fa fa-slideshare"></i>
                                         #end
                                     </a>
                                     &nbsp;&nbsp;
                                     <span class="meta-span">
-	                                	${timespan(comment.reply_time)}
+	                                	${timespan(comment.created)}
 	                                </span>
                                 </h4>
                                 ${comment.content}
                             </div>
                         </li>
                         <hr class="smallhr">
-                        <script>comment_members.push('${comment.reply_name}');</script>
+                        <script>comment_members.push('${comment.author}');</script>
                         #end
                     </ul>
                 </div>
@@ -142,7 +142,7 @@
                     <form id="comment-form" onsubmit="return doComment();" class="form-horizontal" role="form"
                           method="post">
                         <input type="hidden" name="tid" value="${topic.tid}">
-                        <input type="hidden" name="tuid" value="${topic.uid}">
+                        <input type="hidden" name="username" value="${topic.username}">
                         <div class="mb10">
 	                        <textarea id="content" class="inputor form-control textarea-control-comment"
                                       name="content" rows="4" placeholder="对楼主说点儿什么吧.." required="required"></textarea>

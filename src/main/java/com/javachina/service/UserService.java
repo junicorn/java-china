@@ -14,7 +14,7 @@ public interface UserService {
 
     User getUserByTake(Take take);
 
-    User getUserByLoginName(String user_name);
+    User getByUserName(String username);
 
     Map<String, Object> getUserDetail(Integer uid);
 

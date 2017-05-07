@@ -12,7 +12,7 @@ import com.blade.kit.StringKit;
 import com.javachina.constants.Actions;
 import com.javachina.dto.LoginUser;
 import com.javachina.exception.TipException;
-import com.javachina.ext.Funcs;
+import com.javachina.ext.TplFunctions;
 import com.javachina.kit.MailKit;
 import com.javachina.model.Remind;
 import com.javachina.model.User;
@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
                 map.put("signature", EmojiParser.parseToUnicode(userInfo.getSignature()));
             }
             map.put("created", user.getCreated());
-            String avatar = Funcs.avatar_url(user.getAvatar());
+            String avatar = TplFunctions.avatar_url(user.getAvatar());
             map.put("avatar", avatar);
         }
         return map;
@@ -210,21 +210,20 @@ public class UserServiceImpl implements UserService {
             user = this.getUserById(uid);
         }
         if (null != user) {
-            LoginUser loginUser =
-                    LoginUser.builder().uid(user.getUid())
-                            .username(user.getUsername())
-                            .password(user.getPassword())
-                            .status(user.getStatus())
-                            .role_id(user.getRole_id())
-                            .avatar(user.getAvatar()).build();
+            LoginUser loginUser = LoginUser.builder().uid(user.getUid())
+                    .username(user.getUsername())
+                    .password(user.getPassword())
+                    .status(user.getStatus())
+                    .role_id(user.getRole_id())
+                    .avatar(user.getAvatar()).build();
 
             Integer comments = 1;//commentService.getComments(user.getUid());
             loginUser.setComments(comments);
 
-            Integer topics = topicService.getTopics(user.getUid());
+            Integer topics = topicService.getTopics(user.getUsername());
             loginUser.setTopics(topics);
 
-//            Integer notices = eventService.getNotices(user.getUid());
+//            Integer notices = eventService.getReminds(user.getUid());
 //            loginUser.setNotices(notices);
 
             UserInfo userInfo = userInfoService.getUserInfoById(user.getUid());
@@ -256,7 +255,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByLoginName(String username) {
+    public User getByUserName(String username) {
         if (StringKit.isNotBlank(username)) {
             Take take = new Take(User.class);
             take.in("status", 0, 1)

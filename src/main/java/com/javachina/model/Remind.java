@@ -1,6 +1,7 @@
 package com.javachina.model;
 
 import com.blade.jdbc.annotation.Table;
+import com.blade.kit.StringKit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class Remind implements Serializable {
 
     private Integer id;
     private String from_user;
-    private Integer to_uid;
+    private String to_user;
     private String event_id;
     private String title;
     private String content;

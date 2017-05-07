@@ -14,7 +14,7 @@ import com.javachina.constants.Actions;
 import com.javachina.constants.EventType;
 import com.javachina.dto.HomeTopic;
 import com.javachina.exception.TipException;
-import com.javachina.ext.Funcs;
+import com.javachina.ext.TplFunctions;
 import com.javachina.ext.PageHelper;
 import com.javachina.kit.Utils;
 import com.javachina.model.*;
@@ -99,7 +99,7 @@ public class TopicServiceImpl implements TopicService {
         topic.setStatus(1);
 
         activeRecord.insert(topic);
-        Integer uid = topic.getUid();
+
         this.updateWeight(tid);
         // 更新节点下的帖子数
         nodeService.updateCount(topic.getNid(), EventType.TOPICS, +1);
@@ -110,8 +110,8 @@ public class TopicServiceImpl implements TopicService {
         Set<String> atUsers = Utils.getAtUsers(topic.getContent());
         if (CollectionKit.isNotEmpty(atUsers)) {
             for (String user_name : atUsers) {
-                User user = userService.getUserByLoginName(user_name);
-                if (null != user && !user.getUid().equals(topic.getUid())) {
+                User user = userService.getByUserName(user_name);
+                if (null != user && !user.getUsername().equals(topic.getUsername())) {
 //                    eventService.save(Types.topic_at.toString(), uid, user.getUid(), tid);
                 }
             }
@@ -145,16 +145,15 @@ public class TopicServiceImpl implements TopicService {
             return null;
         }
         String tid = topic.getTid();
-        Integer uid = topic.getUid();
         Integer nid = topic.getNid();
 
-        User user = userService.getUserById(uid);
+        User user = userService.getByUserName(topic.getUsername());
         Node node = nodeService.getNodeById(nid);
 
         Map<String, Object> map = BeanKit.beanToMap(topic);
         if (null != user) {
             map.put("username", user.getUsername());
-            String avatar = Funcs.avatar_url(user.getAvatar());
+            String avatar = TplFunctions.avatar_url(user.getAvatar());
             map.put("avatar", avatar);
         }
 
@@ -200,37 +199,40 @@ public class TopicServiceImpl implements TopicService {
             }
 
             String content = comment.getContent();
-            Integer last_time = this.getLastUpdateTime(comment.getAuthor_id());
+            Integer last_time = this.getLastUpdateTime(comment.getAuthor());
             if (null != last_time && (DateKit.getCurrentUnixTime() - last_time) < 10) {
                 throw new TipException("您操作频率太快，过一会儿操作吧！");
             }
 
             content = EmojiParser.parseToAliases(content);
-
             Integer cid = commentService.save(comment);
+
+            activeRecord.execute("update t_topic set comments = comments+1 where tid = ?", comment.getTid());
 
             this.updateWeight(comment.getTid());
 
             // 通知
-            if (!comment.getAuthor_id().equals(comment.getOwner_id())) {
+            if (!comment.getAuthor().equals(comment.getOwner())) {
 
-                remindService.saveRemind(Remind.builder().from_user(comment.getAuthor()).to_uid(comment.getOwner_id()).event_id(comment.getTid())
+                remindService.saveRemind(Remind.builder().from_user(comment.getAuthor()).to_user(comment.getOwner()).event_id(comment.getTid())
                         .title(title).content(content).remind_type(Actions.COMMENT).build());
+            }
 
-                // 通知@的用户
-                Set<String> atUsers = Utils.getAtUsers(content);
-                if (CollectionKit.isNotEmpty(atUsers)) {
-                    for (String user_name : atUsers) {
-                        User user = userService.getUserByLoginName(user_name);
-                        if (null != user && !user.getUid().equals(comment.getAuthor_id())) {
-                            remindService.saveRemind(Remind.builder().from_user(comment.getAuthor()).to_uid(user.getUid()).event_id(comment.getTid())
-                                    .title(title).content(content).remind_type(Actions.AT).build());
-                        }
+            // 通知@的用户
+            Set<String> atUsers = Utils.getAtUsers(content);
+            if (CollectionKit.isNotEmpty(atUsers)) {
+                for (String user_name : atUsers) {
+                    User user = userService.getByUserName(user_name);
+                    if (null != user && !user.getUid().equals(comment.getAuthor())) {
+                        remindService.saveRemind(Remind.builder().from_user(comment.getAuthor()).to_user(user.getUsername()).event_id(comment.getTid())
+                                .title(title).content(content).remind_type(Actions.AT).build());
                     }
                 }
-                // 更新总评论数
-                optionsService.updateCount(EventType.COMMENT_COUNT, +1);
             }
+
+            // 更新总评论数
+            optionsService.updateCount(EventType.COMMENT_COUNT, +1);
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -239,10 +241,10 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Integer getTopics(Integer uid) {
-        if (null != uid) {
+    public Integer getTopics(String username) {
+        if (StringKit.isNotBlank(username)) {
             Topic topic = new Topic();
-            topic.setUid(uid);
+            topic.setUsername(username);
             topic.setStatus(1);
             return activeRecord.count(topic);
         }
@@ -269,19 +271,19 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Integer getLastCreateTime(Integer uid) {
-        if (null == uid) {
+    public Integer getLastCreateTime(String username) {
+        if (StringKit.isBlank(username)) {
             return null;
         }
-        return activeRecord.one(Integer.class, "select created from t_topic where uid = ? order by created desc limit 1", uid);
+        return activeRecord.one(Integer.class, "select created from t_topic where username = ? order by created desc limit 1", username);
     }
 
     @Override
-    public Integer getLastUpdateTime(Integer uid) {
-        if (null == uid) {
+    public Integer getLastUpdateTime(String username) {
+        if (StringKit.isBlank(username)) {
             return null;
         }
-        return activeRecord.one(Integer.class, "select updated from t_topic where uid = ? order by created desc limit 1", uid);
+        return activeRecord.one(Integer.class, "select updated from t_topic where username = ? order by created desc limit 1", username);
     }
 
     @Override
@@ -306,10 +308,7 @@ public class TopicServiceImpl implements TopicService {
     public void updateWeight(String tid, Integer loves, Integer favorites, Integer comment, Integer sinks, Integer created) {
         try {
             double weight = Utils.getWeight(loves, favorites, comment, sinks, created);
-            Topic topic = new Topic();
-            topic.setTid(tid);
-            topic.setWeight(weight);
-            activeRecord.update(topic);
+            activeRecord.execute("update t_topic set weight = ? where tid = ?", weight, tid);
         } catch (Exception e) {
             throw e;
         }
@@ -337,6 +336,12 @@ public class TopicServiceImpl implements TopicService {
             Integer comment = topic.getComments();
             Integer sinks = topic.getSinks();
             Integer created = topic.getCreated();
+
+            loves = null == loves ? 0 : loves;
+            favorites = null == favorites ? 0 : favorites;
+            comment = null == comment ? 0 : comment;
+            sinks = null == sinks ? 0 : sinks;
+
             this.updateWeight(topic.getTid(), loves, favorites, comment, sinks, created);
         } catch (Exception e) {
             throw e;
@@ -378,9 +383,9 @@ public class TopicServiceImpl implements TopicService {
         if (limit <= 0 || limit >= 50) {
             limit = 20;
         }
-        String sql = "select b.username, b.avatar, a.tid, a.title, a.created, a.updated," +
+        String sql = "select a.username, b.avatar, a.tid, a.title, a.created, a.updated," +
                 " c.title as node_title, c.slug as node_slug, a.comments from t_topic a " +
-                "left join t_user b on a.uid = b.uid " +
+                "left join t_user b on a.username = b.username " +
                 "left join t_node c on a.nid = c.nid " +
                 "where a.status=1 ";
         if (null != nid) {
@@ -409,7 +414,7 @@ public class TopicServiceImpl implements TopicService {
         }
 
         String sql = "select b.username, b.avatar, a.tid, a.title from t_topic a " +
-                "left join t_user b on a.uid = b.uid " +
+                "left join t_user b on a.username = b.username " +
                 "where a.status = 1 order by a.weight desc, a.comments desc";
 
         Sql2o sql2o = activeRecord.sql2o();

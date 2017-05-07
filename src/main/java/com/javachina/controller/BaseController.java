@@ -107,4 +107,9 @@ public class BaseController {
         return null != user ? user.getUid() : null;
     }
 
+    public String getUsername() {
+        LoginUser user = getLoginUser();
+        return null != user ? user.getUsername() : null;
+    }
+
 }
