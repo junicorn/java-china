@@ -30,7 +30,7 @@
                     #for(user : userPage.list)
                     <tr>
                         <td>
-                            <a href="${base_url('/member/') + user.login_name}" target="_blank">${user.login_name}</a>
+                            <a href="${base_url('/member/') + user.username}" target="_blank">${user.username}</a>
                         </td>
                         <td>${user.email}</td>
                         <td>${fmtdate(user.created, 'yyyy-MM-dd HH:mm')}</td>

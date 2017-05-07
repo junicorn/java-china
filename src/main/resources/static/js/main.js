@@ -50,7 +50,7 @@ function dispatch() {
 
 function emoji(content) {
     if (content && content.indexOf(':') != -1) {
-        return content.replace(/:([a-z-_]{2,30}):/g, "<img src='" + CDN_URL + "/assets/emojis/$1.png'  height='20' width='20' />");
+        return content.replace(/:([a-z-_]{2,30}):/g, "<img src=" + CDN_URL + "'/static/emojis/$1.png'  height='20' width='20' />");
     }
     return content;
 }

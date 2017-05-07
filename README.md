@@ -3,7 +3,6 @@
 [![Build Status](https://img.shields.io/travis/junicorn/java-china.svg?style=flat-square)](https://travis-ci.org/junicorn/java-china)
 ![Version](https://img.shields.io/badge/version-0.4.1-yellow.svg?style=flat-square)
 [![License](https://img.shields.io/badge/license-Apache2-4EB1BA.svg?style=flat-square)](https://github.com/junicorn/java-china/blob/master/LICENSE)
-[![@biezhi on weibo](https://img.shields.io/badge/weibo-%40biezhi-red.svg?style=flat-square)](http://weibo.com/u/5238733773)
 
 Java中国是一款开源免费的论坛程序，致力于打造一个简洁优质的Java程序员论坛。
 

@@ -196,8 +196,8 @@ public class IndexController extends BaseController {
      */
     @Route(value = "settings")
     public ModelAndView show_settings(Request request, Response response) {
-        Map<String, Object> settings = optionsService.getSystemInfo();
-        request.attribute("settings", settings);
+        Map<String, Object> options = optionsService.getSystemInfo();
+        request.attribute("options", options);
         return this.getAdminView("settings");
     }
 

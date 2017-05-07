@@ -5,10 +5,10 @@
     <title>Java China - ${title}</title>
     <meta name=description content="">
     <meta name=viewport content="width=device-width">
-    <link rel="shortcut icon" href="/assets/favicon.ico"/>
+    <link rel="shortcut icon" href="/static/favicon.ico"/>
     <link type="text/css" rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link href="//cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.css" rel="stylesheet">
-    <link type="text/css" rel=stylesheet href="/assets/styles/admin.css?v=${version}"/>
+    <link type="text/css" rel=stylesheet href="/static/css/admin.css?v=${version}"/>
     <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 </head>
 <body>
@@ -16,7 +16,7 @@
     <div class="sidebar-panel offscreen-left">
         <div class=brand>
             <div class=brand-logo>
-                <img src="/assets/images/logo1.png" height=15 alt="">
+                <img src="/static/images/logo1.png" height=15 alt="">
             </div>
             <a href=javascript:;
                class="toggle-sidebar hidden-xs hamburger-icon v3"
@@ -32,7 +32,7 @@
                         class="fa fa-leaf"></i> <span>节点管理</span></a></li>
                 <li class="#if(active=='users')open#end"><a href="${base_url('/admin/users')}"> <i
                         class="fa fa-user"></i> <span>用户管理</span></a></li>
-                <li class="#if(active=='options')open#end"><a href="${base_url('/admin/options')}"> <i
+                <li class="#if(active=='settings')open#end"><a href="${base_url('/admin/settings')}"> <i
                         class="fa fa-gears"></i> <span>系统设置</span></a></li>
                 <li class="#if(active=='tools')open#end"><a href="${base_url('/admin/tools')}"> <i
                         class="fa fa-paw"></i> <span>系统工具</span></a></li>
@@ -62,10 +62,10 @@
             <ul class="nav navbar-nav navbar-right hidden-xs">
                 <li>
                     <a href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="${cdn_url}/${login_user.avatar}"
-                             class="header-avatar img-circle ml10" alt="${login_user.user_name}"
-                             title="${login_user.user_name}">
-                        <span class=pull-left>管理员：${login_user.user_name}</span>
+                        <img src="${avatar_url(login_user.avatar)}"
+                             class="header-avatar img-circle ml10" alt="${login_user.username}"
+                             title="${login_user.username}">
+                        <span class=pull-left>管理员：${login_user.username}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="${base_url('/')}" target="_blank">论坛首页</a></li>
