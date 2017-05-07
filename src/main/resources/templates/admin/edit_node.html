@@ -1,0 +1,102 @@
+#include("./header.html", {active:'nodes', title:'编辑节点'})
+<div class=main-content>
+    <div class="panel mb25">
+        <div class="panel-heading border">编辑节点</div>
+        <div class="panel-body">
+            <div class="row no-margin">
+                <div class="col-lg-12">
+                    <form id="editnode_form" class="form-horizontal bordered-group" role="form" method="post"
+                          onsubmit="return update_node();">
+                        <input type="hidden" name="nid" value="${node.nid}"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点名称</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="node_name"
+                                       placeholder="请输入节点名称，比如：开发工具" required="required" value="${node.node_name}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">唯一标识</label>
+                            <div class="col-sm-10">
+                                <input name="node_slug" class="form-control" placeholder="请输入节点唯一标识，比如：ide"
+                                       required="required" value="${node.node_slug}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点介绍</label>
+                            <div class="col-sm-10">
+                                <textarea name="description" class="form-control" rows="3" placeholder="请输入节点介绍">${node.description}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择父节点</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="pid">
+                                    <option value="0">无父节点</option>
+                                    #for(item : nodes)
+                                    <option #if(node.pid==item.nid)selected="selected"#end value="${item.nid}">
+                                        ${item.title}
+                                    </option>
+                                    #end
+                                    </option></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">修改节点图标</label>
+                            <div class="col-sm-10">
+                                <input type="hidden" name="node_pic" id="node_pic"/>
+                                <img id="upload_img" alt="${node.node_name}" src="${node.pic}" width="73" height="73"
+                                     onclick="doUpload()" style="cursor: pointer;"/>
+                                <input type="file" name="fileUpload" class="fileUpload"
+                                       accept="image/png,image/jpg,image/jpeg" style="display: none;"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">&nbsp;</label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-success">编辑节点</button>
+                                <a href="${base_url('/admin/nodes')}" type="button" class="btn btn-default btn-outline">取消操作</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+#include("./footer.html")
+<script type="text/javascript" src="${cdn}/assets/scripts/jquery.liteuploader.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(".fileUpload").liteUploader({
+            script: "${base_url('/uploadimg')}",
+            params: {type: 'node'},
+            rules: {
+                allowedFileTypes: "image/jpeg,image/png,image/jpeg",
+                maxSize: 512000
+            }
+        }).on("lu:success", function (e, data) {
+            //console.log(data);
+            if (data) {
+                $("#upload_img").attr('src', data.url);
+                $("#node_pic").val(data.savepath);
+            }
+        }).on("lu:errors", function (e, errors) {
+            console.log(errors);
+        });
+
+        $(".fileUpload").change(function () {
+            $(this).data("liteUploader").startUpload();
+        });
+
+    });
+
+    //上传方法
+    function doUpload() {
+        $(".fileUpload").click();
+    }
+</script>
+</body>
+</html>

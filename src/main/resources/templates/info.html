@@ -1,0 +1,27 @@
+#include("./common/header.html", {title:"系统提示"})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="col-md-6 app layout-fixed-header bg-white usersession">
+                <div class="full-height">
+                    <div class=center-wrapper>
+                        <div class=center-content>
+                            <div class="row no-margin col-md-8">
+                                #if(null != error)
+                                <div class="alert alert-danger mt20 mr20 ml20">${error}</div>
+                                #end
+                                #if(null != info)
+                                <div class="alert alert-info mt20 mr20 ml20">${info}</div>
+                                #end
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

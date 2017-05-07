@@ -1,0 +1,103 @@
+#include("./common/header.html", {active:"home", title : node_name ?! ''})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading home-panel">
+                    <div class="box-tab">
+                        <ul class="nav nav-tabs">
+                            <li #if(null==tab)class="active"#end><a href="${base_url('')}" data-toggle="tab">热门</a></li>
+                            #for(node : hot_nodes)
+                            <li #if(tab==node.slug)class="active"#end><a href="${base_url('/?tab=') + node.slug}"
+                                                                         data-toggle="tab">${node.title}</a></li>
+                            #end
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home">
+                                #if(null == topicPage.list || topicPage.list.size() == 0)
+                                <div class="alert alert-info alert-dismissable">
+                                    该节点下暂时还木有帖子呢 <i class="twa twa-lg twa-sparkles"></i>
+                                </div>
+                                #else
+                                <section class="widget bg-white post-comments">
+
+                                    #for(topic : topicPage.list)
+                                    <div class="media">
+                                        <a class="pull-left" href="${base_url('/member/') + topic.username}">
+                                            <img class="media-object avatar avatar-sm" src="${avatar_url(topic.avatar)}"
+                                                 alt="${topic.username}">
+                                        </a>
+                                        <div class="comment">
+                                            <div class="comment-author h6 no-margin">
+                                                #if(topic.comments > 0)
+                                                <div class="comment-meta small">
+                                                    <a href="${base_url('/topic/') + topic.tid + '#Reply' + topic.comments}"
+                                                       class="badge-comment">${topic.comments}</a>
+                                                </div>
+                                                <a href="${base_url('/topic/') + topic.tid}">${topic.title}</a>
+                                                #else
+                                                <a href="${base_url('/topic/') + topic.tid}">${topic.title}</a>
+                                                #end
+                                            </div>
+                                            <div class="comment-bt">
+                                                <span class="label label-default"><a
+                                                        href="${base_url('/go/') + topic.node_slug}">${topic.node_title}</a></span>
+                                                &nbsp;•&nbsp;
+                                                <strong><a href="${base_url('/member/') + topic.username}">${topic.username}</a></strong>
+                                                &nbsp;•&nbsp; <span>${timespan(topic.updated)}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    #end
+                                </section>
+                                #end
+                                <ul class="pager">
+                                    <li class="pull-left"><a href="${base_url('/recent')}">查看最新帖</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">社区节点导航</h3>
+                </div>
+                <div class="panel-body">
+                    #for(node : nodes)
+                    #if(node.pid == 0 && node.childs > 0)
+                    <div class="row">
+                        <div class="col-sm-2" style="line-height: 30px;">${node.title}</div>
+                        <div class="col-sm-10"><p>
+                            #for(nodeitem : node.items)
+                            <a href="${base_url('/go/') + nodeitem.slug}" class="btn btn-node btn-xs nodes"
+                               role="button">${nodeitem.title}</a>
+                            #end
+                        </p></div>
+                    </div>
+                    #end
+                    #end
+
+                    <div class="row">
+                        <div class="col-sm-offset-2 col-sm-10"><p>
+
+                            #for(node : nodes)
+                            #if(node.pid == 0 && node.childs == 0)
+                            <a class="btn btn-node btn-xs nodes" role="button">${node.title}</a>
+                            #end
+                            #end
+                        </p></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

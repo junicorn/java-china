@@ -1,0 +1,69 @@
+#include("./common/header.html", {active:"signin", title:"登录"})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="col-md-6 app layout-fixed-header bg-white usersession box">
+                <div class="full-height">
+                    <div class=center-wrapper>
+                        <div class="center-content">
+                            <div class="row no-margin col-md-8">
+                                <form id="signin_form" method="post" class="form-layout" onsubmit="return doSignin()"/>
+                                <p class="text-center mb30">欢迎来到JavaChina, 请输入账号登录。</p>
+                                <div class="alert alert-danger hidden"><i class="fa fa-exclamation-triangle"
+                                                                          aria-hidden="true"></i> <label>错误消息</label>
+                                </div>
+                                <div class=form-inputs>
+                                    <input type="text" class="form-control input-lg" name="username"
+                                           placeholder="请输入账号或者邮箱" required=""/>
+                                    <input type="password" class="form-control input-lg" name="password"
+                                           placeholder="请输入登录密码" required=""/>
+                                    <label class="cb-checkbox cb-md">
+                                            <span class="cb-inner"><i><input type="checkbox" name="rememberMe"
+                                                                             checked="checked"/></i></span>记住我
+                                    </label>
+                                </div>
+                                <button class="btn btn-success btn-block btn-lg mb15"
+                                        data-style="zoom-out" type="submit">
+                                    <span class="ladda-label">登&nbsp;录</span>
+                                </button>
+                                <p>
+                                    <a href="${base_url('/signup')}">注册账号</a> ·
+                                    <a href="${base_url('/oauth/github')}">使用Github帐号登录</a> ·
+                                    <a href="${base_url('/forgot')}">忘记密码?</a>
+                                </p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+<script type="text/javascript">
+    var jc = new $.jc();
+    function doSignin() {
+        jc.post({
+            url: '/signin',
+            data: $('#signin_form').serialize(),
+            success: function (result) {
+                if (result && result.success) {
+                    var payload = result.payload;
+                    if (payload && payload != '') {
+                        window.location.href = payload;
+                    } else {
+                        window.location.href = '/';
+                    }
+                } else {
+                    jc.showError('#signin_form .alert-danger', result.msg || '登录失败');
+                }
+            }
+        });
+        return false;
+    }
+
+</script>
+</body>
+</html>

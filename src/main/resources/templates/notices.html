@@ -1,0 +1,57 @@
+#include("./common/header.html", {title:"通知中心"})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">通知中心</h3>
+                </div>
+                <div class="panel-body">
+                    #if(null != noticePage)
+                    <ul class="media-list">
+                        #for(item : noticePage.list)
+                        <li class="media" id="${item.id}">
+                            <div class="media-body">
+                                <h4 class="media-heading topic-list-heading">
+                                    <small>
+                                        <a href="${base_url('/member/') + item.user_name}">${item.user_name}</a>
+                                        <span>${timespan(item.created)}</span>
+                                        #if(item.type=='comment')
+                                        评论了帖子 <a href="${base_url('/topic/') + item.tid}">${item.title}</a>
+                                        #elseif(item.type=='favorites')
+                                        收藏了你的帖子 <a href="${base_url('/topic/') + item.tid}">${item.title}</a>
+                                        #elseif(item.type=='at')
+                                        在帖子 <a href="${base_url('/topic/') + item.tid}">${item.title}</a> 中提到了你
+                                        #end
+                                    </small>
+                                </h4>
+                                ${item.content}
+                            </div>
+                        </li>
+                        <hr class="smallhr">
+                        #end
+                    </ul>
+
+                    #if(noticePage.pages > 1)
+                    <ul class="pager">
+                        #if(noticePage.pageNum > 1)
+                        <li class="pull-left"><a href="${base_url('/notices?p=') + noticePage.prevPage}">上一页</a></li>
+                        #end
+                        #if(noticePage.pages > 1 && noticePage.pageNum != noticePage.pages)
+                        <li class="pull-right"><a href="${base_url('/notices?p=') + noticePage.nextPage}">下一页</a></li>
+                        #end
+                    </ul>
+                    #end
+
+                    #else
+                    <div class="alert alert-info">嗨，${login_user.user_name}！你还没有通知。</div>
+                    #end
+                </div>
+            </div>
+        </div><!-- /.col-md-8 -->
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

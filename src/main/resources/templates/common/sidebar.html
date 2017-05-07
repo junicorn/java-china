@@ -1,0 +1,141 @@
+<div class="col-md-3">
+    #if(null != famousDay)
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">每日格言</h3>
+        </div>
+        <div class="panel-body" style="background-color: #F9FBFD;">
+            <p style="font-family: '华文宋体', '楷体'; font-size: 18px;">${famousDay.famous_saying}</p>
+            <p style="font-family: '华文宋体', '楷体'; font-size: 18px; float: right;">－${famousDay.famous_name}</p>
+        </div>
+    </div>
+    #end
+
+    #if(null != login_user)
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">个人信息</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="profile-sidebar">
+                    <div class="profile-sidebar-item profile-avatar">
+                        <a href="${base_url('/member/' + login_user.username)}">
+                            <img src="${cdn_url}/${login_user.avatar}" alt="${login_user.username}"
+                                 class="avatar avatar-lg img-circle"/>
+                        </a>
+                    </div>
+                    <div class="profile-sidebar-item profile-info">
+                        <span class="h5 bold">${login_user.username}</span>
+                        <p>${login_user.jobs ?! ''}</p>
+                        <div class="w150 center-block mt10">
+                            <a class="btn btn-success btn-outline btn-block" href="${base_url('/topic/add')}">
+                                <span>发布新帖子</span>
+                            </a>
+                        </div>
+                    </div>
+                    <hr>
+                    <ul class="profile-sidebar-item profile-numbers-count">
+                        <li><a href="${base_url('/my/topics')}"><span class="bold">${login_user.my_topics ?! 0}</span>帖子收藏</a>
+                        </li>
+                        <li><a href="${base_url('/my/nodes')}"><span class="bold">${login_user.my_nodes ?! 0}</span>节点收藏</a>
+                        </li>
+                        <li><a href="${base_url('/my/following')}"><span
+                                class="bold">${login_user.following ?! 0}</span>特别关注</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer box">
+            <a href="${base_url('/notices')}"><span id="notice_count">0</span> 条未读提醒</a>
+        </div>
+    </div>
+    #else
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">小帖士</h3>
+        </div>
+        <div class="panel-body">
+            <p>如果你想寻找 Java 的示例项目，请上 <a href="https://github.com/JavaExamples" target="_blank">https://github.com/JavaExamples</a>
+                上面寻找。</p>
+            <p>本站由简洁优雅的JavaWeb框架 <a href="http://bladejava.com" style="color:#8006E4;" target="_blank">Blade</a> 开发。</p>
+            <p>
+                <a href="${base_url('/signin')}" class="btn btn-danger btn-outline btn-sm mr5">立即登录</a>
+                <a href="${base_url('/signup')}" class="btn btn-success btn-outline btn-sm mr5">注册账号</a>
+            </p>
+        </div>
+    </div>
+    #end
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">社区推荐</h3>
+        </div>
+        <div class="panel-body recommend">
+            <section class="widget bg-dark-light">
+                <div class="widget-details">
+                    <a href="http://github.com/biezhi/blade" class="pull-left relative" target="_blank">
+                        <img src="${base}/assets/images/126239034.png" class="avatar avatar-sm img-circle" alt="">
+                        &nbsp; Blade Web Framework
+                    </a>
+                </div>
+            </section>
+            <section class="widget bg-dark-light">
+                <div class="widget-details">
+                    <a href="http://www.vultr.com/?ref=6886447" class="pull-left relative" target="_blank">
+                        本站使用的VPS服务器
+                    </a>
+                </div>
+            </section>
+            <div>
+                <a href="https://portal.qiniu.com/signup?code=3lia9nvk06rte" class="pull-left relative" target="_blank">
+                    <img src="https://o7d6mdbet.qnssl.com/qiniu-blue.png" width="243" height="80"/>
+                </a>
+            </div>
+        </div>
+    </div>
+    #if(null != hot_topics && hot_topics.size() > 0)
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">今日热议帖子</h3>
+        </div>
+        <div class="panel-body">
+            <ul class="list-unstyled hot-topics">
+                #for(topic : hot_topics)
+                <li>
+                    <a href="${base_url('/member/') + topic.username}">
+                        <img class="img-circle" src="${avatar_url(topic.avatar)}" width="25" height="25"/>
+                    </a>
+                    <a href="${base_url('/topic/') + topic.tid}">${topic.title}</a>
+                </li>
+                #end
+            </ul>
+        </div>
+    </div>
+    #end
+    #if(null != hot_nodes && hot_nodes.size() > 0)
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">热门节点</h3>
+        </div>
+        <div class="panel-body">
+            <p class="hot-nodes">
+                #for(node : hot_nodes)
+                <a href="${base_url('/go/') + node.slug}" class="label label-default">${node.title}</a>
+                #end
+            </p>
+        </div>
+    </div>
+    #end
+    #if(null != sys_info)
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">社区运行状况</h3>
+        </div>
+        <div class="panel-body">
+            <p>社区会员：${sys_info.user_count}</p>
+            <p>帖子数　：${sys_info.topic_count}</p>
+            <p>回帖数　：${sys_info.comment_count}</p>
+        </div>
+    </div>
+    #end
+</div><!-- /.col-md-4 -->

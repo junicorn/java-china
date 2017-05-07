@@ -1,0 +1,35 @@
+#include("./common/header.html", {title : '我关注的用户'})
+<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">我关注的用户</h3>
+                </div>
+                <div class="panel-body">
+                    #if(null != followingPage)
+                    <div class="row">
+                        #for(item : followingPage.list)
+                        <div class="col-md-2 text-center">
+                            <a href="${base_url('/member/') + item.username}" alt="${item.username}">
+                                <img alt="${item.username}" class="avatar avatar-md img-circle" src="${item.avatar}">
+                                <div class="h5 mb0">
+                                    <strong>${item.username}</strong>
+                                </div>
+                            </a>
+                        </div>
+                        #end
+                    </div>
+                    #else
+                    <div class="alert alert-info">嗨，${login_user.user_name}！你没有关注任何用户。</div>
+                    #end
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

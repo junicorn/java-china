@@ -1,0 +1,65 @@
+#include("./common/header.html", {site_title:"编辑帖子"})
+<link rel="stylesheet" href="${base}/assets/lib/highlight/styles/default.css"/>
+<link rel="stylesheet" href="${base}/assets/lib/highlight/styles/github.css"/>
+<script src="${base}/assets/lib/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">编辑帖子</h3>
+                </div>
+                <div class="panel-body">
+                    #if(null!=error)
+                    <div class="alert alert-danger">${error}</div>
+                    #end
+                    <form id="topic-edit" accept-charset="utf-8" role="form" onsubmit="return topic.edit();">
+                        <div class="form-group">
+                            <label for="title">标题</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="请输入帖子标题"
+                                   required="required" value="${topic.title}"/>
+                        </div>
+                        <input type="hidden" name="tid" value="${topic.tid}"/>
+                        <div class="form-group">
+                            <label for="nid">节点</label>
+                            <select class="form-control" id="nid" name="nid">
+                                <option value="">请选择节点</option>
+                                #for(node : nodes)
+                                #if(node.pid == 0)
+                                #if(null != node.items)
+                                <optgroup label="${node.title}"></optgroup>
+                                #for(item : node.items)
+                                <option #if(topic.nid== item.nid)selected="selected" #end value="${item.nid}">
+                                    ${item.title}
+                                </option>
+                                #end
+                                #else
+                                <option value="${node.nid}">${node.title}</option>
+                                #end
+                                #end
+                                #end
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nid">帖子内容</label>
+                            <div class="form-group">
+	                            <textarea data-emojiable="true" id="content" class="form-control"
+                                          placeholder="撸下你要发射的内容!!!" name="content" rows="8" required="required">${topic.content}</textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-default btn-small preview">预览帖子</button>
+                            <button type="submit" class="btn btn-primary btn-small">发布帖子</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="markdown_preview" class="panel-footer hide"></div>
+            </div>
+        </div><!-- /.col-md-8 -->
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

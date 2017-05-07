@@ -1,0 +1,100 @@
+#include("./header.html", {active:'users', title:'用户管理'})
+<div class=main-content>
+    <div class="panel mb25">
+        <div class="panel-heading">用户列表</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="row">
+                    <div class="pull-left pl10">
+                        <form action="${base_url('/admin/users')}" method="post">
+                            <label>
+                                <input type="search" class="form-control" name="email" placeholder="搜索..."
+                                       value="${email}"/>
+                            </label>
+                            <button type="submit" class="btn btn-icon-icon btn-sm btn-google-plus btn-round"><i
+                                    class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped mb0">
+                    <thead>
+                    <tr>
+                        <th width="20%">用户名</th>
+                        <th width="20%">用户邮箱</th>
+                        <th width="20%">注册日期</th>
+                        <th width="20%">用户状态</th>
+                        <th align="center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="user-table">
+                    #for(user : userPage.list)
+                    <tr>
+                        <td>
+                            <a href="${base_url('/member/') + user.login_name}" target="_blank">${user.login_name}</a>
+                        </td>
+                        <td>${user.email}</td>
+                        <td>${fmtdate(user.created, 'yyyy-MM-dd HH:mm')}</td>
+                        <td>
+                            #if(user.status == 0)
+                            未激活
+                            #elseif(user.status == 1)
+                            正常
+                            #elseif(user.status == 2)
+                            已拉黑
+                            #end
+                        </td>
+                        <td>
+                            #if(user.role_id != 1)
+
+                            #if(user.status == 0)
+                            <a href="javascript:;" uid="${user.uid}"
+                               class="btn btn-danger btn-outline btn-sm activeAccount">激活账户</a>
+                            <a href="javascript:;" uid="${user.uid}"
+                               class="btn btn-danger btn-outline btn-sm resendMail">重新发送邮件激活</a>
+                            #end
+
+                            #if(user.status == 1)
+                            #if(user.role_id == 3 && login_user.role_id == 1)
+                            <a href="javascript:;" uid="${user.uid}" class="btn btn-danger btn-outline btn-sm disable">拉黑</a>
+                            <a href="javascript:;" uid="${user.uid}"
+                               class="btn btn-danger btn-outline btn-sm removeAdmin">取消管理员</a>
+                            #elseif(user.role_id == 5 && login_user.role_id == 1)
+                            <a href="javascript:;" uid="${user.uid}" class="btn btn-danger btn-outline btn-sm disable">拉黑</a>
+                            <a href="javascript:;" uid="${user.uid}" class="btn btn-danger btn-outline btn-sm setAdmin">设置管理员</a>
+                            #elseif(login_user.role_id == 3 && user.role_id == 5)
+                            <a href="javascript:;" uid="${user.uid}" class="btn btn-danger btn-outline btn-sm disable">拉黑</a>
+                            #end
+                            #end
+
+                            #if(user.status == 2)
+                            <a href="javascript:;" uid="${user.uid}"
+                               class="btn btn-danger btn-outline btn-sm recoveryAccount">恢复账户</a>
+                            #end
+
+                            #end
+                        </td>
+                    </tr>
+                    #end
+                    </tbody>
+                </table>
+            </div>
+            <div class="datatable-bottom pt10">
+                <div class="pull-right">
+                    #if(userPage.pages > 1)
+                    <ul class="pager">
+                        #if(userPage.pageNum > 1)
+                        <li class="pull-left"><a href="${base_url('/admin/users?p=') + userPage.prevPage}">上一页</a></li>
+                        #end
+                        #if(userPage.pages > 1 && userPage.pageNum != userPage.pages)
+                        <li class="pull-right"><a href="${base_url('/admin/users?p=') + userPage.nextPage}">下一页</a></li>
+                        #end
+                    </ul>
+                    #end
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+#include("./footer.html")
+</body>
+</html>

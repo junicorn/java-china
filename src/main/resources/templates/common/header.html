@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>#if(title != null && title != '')${title} - #end ${sys_info.site_title ?! 'Java中国'} #if(title=='') -
+        优质开发者社区#end</title>
+    <link type="text/css" rel="stylesheet" href="/assets/styles/main.min.css?ver=${version}"/>
+    <link type="text/css" rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link href="//cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.css" rel="stylesheet">
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="shortcut icon" href="/assets/favicon.ico"/>
+    <meta name="description" content="${sys_info.site_description ?! ''}"/>
+    <meta name="keywords" content="${sys_info.site_keywords ?! ''}"/>
+    <meta name="csrf-token" content="${csrf_token}"/>
+    <meta name="google-site-verification" content="-fVfWY81Voot4r0-0Tt0uKva8SxwDyz3yXWIaX1HgEg"/>
+    <meta name="baidu-site-verification" content="b9WlfBhzs1"/>
+    <script type="text/javascript">
+        var BASE = '${base}';
+        var CDN_URL = '${cdn}';
+    </script>
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<nav class="navbar navbar-default box" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="${base_url('')}">Java中国</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="#if(active=='markdown')active#end"><a href="${base_url('/markdown')}">MarkDown</a></li>
+                <li class="#if(active=='essence')active#end"><a href="${base_url('/essence')}">精华贴</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="${base_url('')}">首页</a></li>
+                #if(null == login_user)
+                <li class="#if(active=='signup')active#end"><a href="${base_url('/signup')}">注册</a></li>
+                <li class="#if(active=='signin')active#end"><a href="${base_url('/signin')}">登录</a></li>
+                #else
+                <li>
+                    <a href="${base_url('/settings')}">设置</a>
+                </li>
+                #if(login_user.role_id < 2)
+                <li>
+                    <a href="${base_url('/admin')}">进入后台</a>
+                </li>
+                #end
+                <li>
+                    <a href="${base_url('/logout')}">注销</a>
+                </li>
+                #end
+            </ul>
+            <form class="navbar-form navbar-right" onsubmit="return dispatch();" role="search" method="get"
+                  target="_blank">
+                <div class="form-group input-sm">
+                    <input type="text" class="form-control input-sm" placeholder="搜索..." name="q" id="q"/>
+                </div>
+            </form>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container -->
+</nav>

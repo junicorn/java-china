@@ -1,0 +1,24 @@
+#include("./common/header.html", {active:"essence", title : '精华帖子'})
+<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 essence">
+            #for(topic : topicPage.list)
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <i class="fa fa-diamond"></i> <a href="${base_url('/topic/') + topic.tid}">${topic.title}</a>
+                    <p class="pull-right">
+			  		<span class="label label-default">
+			  			<a href="${base_url('/go/') + topic.node_slug}">${topic.node_title}</a>
+			  		</span>
+                    </p>
+                </div>
+            </div>
+            #end
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

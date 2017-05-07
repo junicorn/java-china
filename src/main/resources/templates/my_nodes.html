@@ -1,0 +1,41 @@
+#include("./common/header.html", {title : '我收藏的节点'})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <h3 class="panel-title">我收藏的节点</h3>
+                    </div>
+                    <div class="pull-right">
+                        节点总数&nbsp;${nodes.size() ?! 0}
+                    </div>
+                </div>
+                <div class="panel-body">
+                    #if(null != nodes)
+                    #for(node : nodes)
+                    <div class="col-md-2 text-center">
+                        <div class="widget bg-white">
+                            <div>
+                                <a href="${base_url('/go/') + node.node_slug}"><img width="73" height="73"
+                                                                                    class="img-circle"
+                                                                                    src="${node.pic}"></a>
+                            </div>
+                            <div class="overflow-hidden mt10">
+                                <span class="widget-title">${node.node_name}</span>
+                            </div>
+                        </div>
+                    </div>
+                    #end
+                    #else
+                    <div class="alert alert-info">嗨，${login_user.user_name}！你还没有收藏的节点。</div>
+                    #end
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

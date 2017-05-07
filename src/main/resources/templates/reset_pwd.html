@@ -1,0 +1,41 @@
+#include("./common/header.html", {title:"设置新密码"})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="col-md-6 app layout-fixed-header bg-white usersession box">
+                <div class="full-height">
+                    <div class=center-wrapper>
+                        <div class="center-content">
+                            <div class="row no-margin col-md-8">
+                                #if(null != info)
+                                <div class="alert alert-success mt20 mr20 ml20">${info}</div>
+                                #else
+                                <form role="form" action="${base_url('/reset_pwd')}" class="form-layout" method="post"/>
+                                <input type="hidden" name="code" value="${code}"/>
+                                <p class="text-center mb30">设置您的新密码</p>
+                                #if(null != error)
+                                <div class="alert alert-danger">${error}</div>
+                                #end
+                                <div class=form-inputs>
+                                    <input type="password" class="form-control input-lg" name="pass_word"
+                                           placeholder="请输入6-20位新密码" required="required"/>
+                                </div>
+                                <div class=form-inputs>
+                                    <input type="password" class="form-control input-lg" name="re_pass_word"
+                                           placeholder="确认新密码" required="required"/>
+                                </div>
+                                <button class="btn btn-success btn-block btn-lg mb15" type="submit">修改密码</button>
+                                </form>
+                                #end
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.col-md-8 -->
+        #include("./common/sidebar.html")
+    </div><!-- /.row -->
+</div><!-- /.container -->
+#include("./common/footer.html")
+</body>
+</html>

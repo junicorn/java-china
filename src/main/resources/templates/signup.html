@@ -1,0 +1,61 @@
+#include("./common/header.html", {active:"signup", title:"注册"})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="app layout-fixed-header bg-white usersession box">
+                <div class="full-height">
+                    <div class=center-wrapper>
+                        <div class=center-content>
+                            <div class="row no-margin col-md-8">
+                                <form role="form" action="${base_url('/signup')}" class="form-layout" method="post">
+                                    <p class="text-center mb30">创建一个新账号</p>
+                                    <div id="failInfo" class="alert alert-danger hidden"></div>
+                                    <div class=form-inputs>
+                                        <div class="input-group mb15">
+                                            <span class="input-group-addon">用户名</span>
+                                            <input type="text" name="username" class="form-control input-lg"
+                                                   placeholder="请使用半角的 a-z 或数字 0-9" required="required"/>
+                                        </div>
+                                        <div class="input-group mb15">
+                                            <span class="input-group-addon">邮　箱</span>
+                                            <input type="email" name="email" class="form-control input-lg"
+                                                   placeholder="请使用真实电子邮箱注册，我们不会将你的邮箱地址分享给任何人" required="required"/>
+                                        </div>
+                                        <div class="input-group mb15">
+                                            <span class="input-group-addon">密　码</span>
+                                            <input type="password" name="password" class="form-control input-lg"
+                                                   placeholder="请输入6-20位密码" required="required"/>
+                                        </div>
+
+                                        <div class="input-group mb15">
+                                            <span class="input-group-addon">验证码&nbsp;</span>
+                                            <div class="row">
+                                                <div class="col-sm-7">
+                                                    <input type="text" style="height: 45px;" class="form-control"
+                                                           name="auth_code" placeholder="请输入验证码" maxlength="6"
+                                                           required="required"/>
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <img id="captcha" style="cursor: pointer;"
+                                                         src="${base_url('/captcha')}" alt="点击切换验证码" title="点击切换验证码"
+                                                         width="150" height="45" onclick="change_captcha()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success btn-block btn-lg mb15" type="submit">创建账号</button>
+                                    </p>
+                                </form>
+                                <div id="successInfo" class="alert alert-success mt20 mr20 ml20 hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

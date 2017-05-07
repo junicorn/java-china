@@ -1,0 +1,151 @@
+#include("./common/header.html", {title: profile.username})
+<link rel="stylesheet" href="${base}/assets/lib/highlight/styles/default.css"/>
+<link rel="stylesheet" href="${base}/assets/lib/highlight/styles/github.css"/>
+<script src="${base}/assets/lib/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default bg-dark-light">
+                <div class="profile-bg" style="background-image:url(${base}/assets/images/profile/bg${random(3)}.jpg);">
+                    &nbsp;
+                </div>
+                <div class="panel-body profile">
+                    <div class="col-md-2">
+                        <img class="avatar avatar-md img-circle" src="${profile.avatar}" alt="${profile.username}">
+                    </div>
+                    <div class="col-md-10">
+                        #if(null == login_user)
+                        <a href="javascript:void(0);" uid="${profile.uid}"
+                           class="btn btn-default btn-sm pull-right following" role="button">关注Ta</a>
+                        #else
+                        #if(profile.uid != login_user.uid)
+                        #if(!is_follow)
+                        <a href="javascript:void(0);" uid="${profile.uid}"
+                           class="btn btn-default btn-sm pull-right following" role="button">关注Ta</a>
+                        #else
+                        <a href="javascript:void(0);" uid="${profile.uid}"
+                           class="btn btn-danger btn-sm pull-right following" role="button">取消关注</a>
+                        #end
+                        #end
+                        #end
+                        <h4 style="color: #fff;">${profile.username}</h4>
+                        #if(null != profile.signature && profile.signature != "")
+                        <p style="color: #fff;">${profile.signature}</p>
+                        #else
+                        <p>&nbsp;</p>
+                        #end
+                    </div>
+                    <div class="col-md-9 mt20">
+                        <p>
+                            #if(null != profile.location && profile.location != '')
+                            <a class="btn-round bg-default-light pl10 pr10 pt5 pb5 mr5"
+                               href="http://map.baidu.com/?q=${profile.location}" target="_blank">
+                                <i class="fa fa-location-arrow mr5"></i> ${profile.location}
+                            </a>
+                            #end
+                            #if(null != profile.web_site && profile.web_site != '')
+                            <a class="btn-round bg-default-light pl10 pr10 pt5 pb5 mr5" href="${profile.web_site}"
+                               target="_blank">
+                                <i class="fa fa-home mr5"></i> ${profile.web_site}
+                            </a>
+                            #end
+                            #if(null != profile.github && profile.github != '')
+                            <a class="btn-round bg-default-light pl10 pr10 pt5 pb5 mr5"
+                               href="https://github.com/${profile.github}" target="_blank">
+                                <i class="fa fa-github mr5"></i> ${profile.github}
+                            </a>
+                            #end
+                            #if(null != profile.weibo && profile.weibo != '')
+                            <a class="btn-round bg-default-light pl10 pr10 pt5 pb5 mr5"
+                               href="http://weibo.com/u/${profile.weibo}" target="_blank">
+                                <i class="fa fa-weibo mr5"></i> ${profile.weibo}
+                            </a>
+                            #end
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="pull-right">
+                            <small>${profile.username}是第${profile.uid}号会员<br/>加入于${fmtdate(profile.created)}</small>
+                        </p>
+                    </div>
+                </div>
+            </div><!-- /.info -->
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>${profile.username} 最近创建的帖子</span>
+                </div>
+                <div class="panel-body essence">
+                    #for(topic : topicPage.list)
+                    <div class="panel panel-default">
+                        <div class="panel-body #if(for.index % 2 == 0)bg-fb#end">
+                            <i class="fa fa-bookmark-o"></i>&nbsp;<a href="${base_url('/topic/') + topic.tid}">${topic.title}</a>
+                            <p class="pull-right">
+					  		<span class="label">
+					  			<a style="cursor: default;">发布于 ${timespan(topic.created)}</a>
+					  		</span>
+                            </p>
+                        </div>
+                    </div>
+                    #end
+                </div>
+            </div><!-- /.topics -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>${profile.username} 最近回复了</span>
+                </div>
+                <div class="panel-body">
+                    #for(comment : commentPage.list)
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div>${timespan(comment.reply_time)} 回复了 ${comment.reply_name} 创建的帖子 <a
+                                    href="${base_url('/topic/') + comment.tid}">${comment.title}</a></div>
+                            <p>${comment.content}</p>
+                        </div>
+                    </div>
+                    #end
+                </div>
+            </div><!-- /.comments -->
+        </div><!-- /.col-md-8 -->
+        #if(null != profile.github && profile.github != '')
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>${profile.username} repos on GitHub</span>
+                </div>
+                <div id="github-panel" class="panel-body">
+                </div>
+            </div>
+        </div>
+        #end
+    </div>
+</div>
+#include("./common/footer.html")
+<script>
+    $(document).ready(function () {
+        var github_user = '${profile.github}';
+        if (github_user && github_user != '') {
+            var url = 'https://api.github.com/users/${profile.github}/repos?sort=updated&direction=desc';
+            $.get(url, {}, function (data) {
+                if (data) {
+                    for (i in data) {
+                        var html = '<div class="widget bg-fb mb10">' +
+                            '	<div class="widget-bg-icon">' +
+                            '		<i class="fa fa-github"></i>' +
+                            '	</div>' +
+                            '	<div class="widget-details">' +
+                            '		<p style="color:#4F5052;"><a href="' + data[i].html_url + '" target="_blank" style="color:#4F5052;font-size: 16px;">' + data[i].name + '</a> / ' + data[i].stargazers_count + ' stars</p>' +
+                            '		<p style="color:#778087;">' + emoji(data[i].description) + '</p>' +
+                            '	</div>' +
+                            '</div>';
+
+                        $('#github-panel').append(html);
+                    }
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

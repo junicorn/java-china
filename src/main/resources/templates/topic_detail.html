@@ -1,0 +1,192 @@
+#include("./common/header.html",{title:topic.title ?! ''})
+<link rel="stylesheet" href="${base}/assets/lib/highlight/styles/default.css"/>
+<link rel="stylesheet" href="${base}/assets/lib/highlight/styles/github.css"/>
+<script src="${base}/assets/lib/highlight/highlight.pack.js"></script>
+<script>
+    var comment_members = ['${topic.username}'];
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default topic-detail-heading">
+                <div class="panel-heading pb0">
+                    <div class="pull-right">
+                        <a href="${base_url('/member/') + topic.username}" title="${topic.username}">
+                            <img class="avatar avatar-sm img-circle" src="${avatar_url(topic.avatar)}"
+                                 alt="${topic.username}">
+                        </a>
+                    </div>
+                    <p><a href="${base_url('')}">首页</a> / <a href="${base_url('/go/') + topic.node_slug}">$!{topic.node_name}</a>
+                    </p>
+                    <h1 class="panel-title">$!{topic.title}</h1>
+                    <p class="mt5">
+                        <small class="text-muted">
+                            <span>by <a href="${base_url('/member/')}${topic.username}">${topic.username}</a></span>&nbsp;•&nbsp;
+                            <span>${fmtdate(topic.created)}</span>
+                            #if(null!=login_user)
+                            &nbsp;&nbsp;&nbsp;<span><a href="javascript:void(0);" tid="${topic.tid}" class="sinks"
+                                                       alt="下沉" title="下沉"><i class="fa fa-sort-desc"
+                                                                              aria-hidden="true"></i></a></span>
+                            #if(topic.uid == login_user.uid)
+                            &nbsp;•&nbsp;&nbsp;<span><a href="${base_url('/topic/edit/') + topic.tid}">编辑</a></span>
+                            #end
+                            #end
+                        </small>
+                    </p>
+                </div>
+                <div class="panel-body topic-detail">
+                    ${topic.content}
+                </div>
+                #if(null != login_user)
+                <div class="panel-footer topic-footer">
+                    <div class="pull-left left">
+                        #if(is_love)
+                        <div class="heart heartRed" id="like_topic" tid="${topic.tid}" rel="unlike"></div>
+                        #else
+                        <div class="heart " id="like_topic" tid="${topic.tid}" rel="like"></div>
+                        #end
+                        <span class="likeCount" id="likeCount">${topic.loves}</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span><a>分享到：</a><a href="javascript:void(0);" class="share-weibo"><i class="fa fa-weibo"
+                                                                                              aria-hidden="true"></i></a></span>
+                    </div>
+
+                    <div class="pull-right right">
+                        <span class="text-muted">${topic.views}次点击&nbsp;•&nbsp;</span>
+                        <span class="text-muted">${topic.favorites}人收藏</span>
+
+                        #if(is_favorite)
+                        <a class="follow" tid="${topic.tid}" role="button" href="javascript:void(0);">&nbsp;•&nbsp;<small
+                                class="text-muted">取消收藏
+                        </small>
+                        </a>
+                        #else
+                        <a class="follow" tid="${topic.tid}" role="button" href="javascript:void(0);">&nbsp;•&nbsp;<small
+                                class="text-muted">加入收藏
+                        </small>
+                        </a>
+                        #end
+
+                        #if(null!=login_user && login_user.role_id < 3)
+                        #if(topic.is_essence == 0)
+                        <a class="essence" tid="${topic.tid}" role="button" href="javascript:void(0);">&nbsp;•&nbsp;<small
+                                class="text-muted ">加精
+                        </small>
+                        </a>
+                        #else
+                        <a class="essence" tid="${topic.tid}" role="button" href="javascript:void(0);">&nbsp;•&nbsp;<small
+                                class="text-muted ">取消加精
+                        </small>
+                        </a>
+                        #end
+                        <a class="deltopic" tid="${topic.tid}" role="button" href="javascript:void(0);">&nbsp;•&nbsp;<small
+                                class="text-muted ">删帖
+                        </small>
+                        </a>
+                        #end
+                    </div>
+                </div>
+                #end
+            </div><!-- /.panel content -->
+
+            #if(topic.comments > 0)
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>$!{topic.comment} 回复 | 直到${today("yyyy-MM-dd HH:mm")}</span>
+                </div>
+                <div class="panel-body">
+                    <ul class="media-list comment-list">
+                        #for(comment : commentPage.list)
+                        <li class="media" id="Reply${for.index}">
+                            <a href="javascript:void(0);" alt="${comment.reply_name}"
+                               class="pull-right text-muted at-user">
+                                <i class="fa fa-mail-forward"></i> #${for.index}
+                            </a>
+                            <a class="media-left" href="${base_url('/member/') + comment.reply_name}">
+                                <img class="avatar avatar-sm img-circle" src="${comment.reply_avatar}"
+                                     alt="${comment.reply_name}">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="media-heading topic-list-heading">
+                                    <a href="${base_url('/member/') + comment.reply_name}">
+                                        ${comment.reply_name}
+                                        #if(comment.role_id <= 3)
+                                        &nbsp;<i class="fa fa-slideshare"></i>
+                                        #end
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <span class="meta-span">
+	                                	${timespan(comment.reply_time)}
+	                                </span>
+                                </h4>
+                                ${comment.content}
+                            </div>
+                        </li>
+                        <hr class="smallhr">
+                        <script>comment_members.push('${comment.reply_name}');</script>
+                        #end
+                    </ul>
+                </div>
+            </div><!-- /.panel comment -->
+            #end
+
+            <div class="panel panel-default" id="Reply">
+                <div class="panel-heading">
+                    <span>添加一条新回复</span>
+                    <p class="pull-right mr5">
+                        <span><a href="#">回到顶部 <i class="fa fa-angle-double-up fa-fw"></i></a></span>
+                    </p>
+                </div>
+                <div class="panel-body">
+                    #if(null != login_user)
+                    <form id="comment-form" onsubmit="return doComment();" class="form-horizontal" role="form"
+                          method="post">
+                        <input type="hidden" name="tid" value="${topic.tid}">
+                        <input type="hidden" name="tuid" value="${topic.uid}">
+                        <div class="mb10">
+	                        <textarea id="content" class="inputor form-control textarea-control-comment"
+                                      name="content" rows="4" placeholder="对楼主说点儿什么吧.." required="required"></textarea>
+                        </div>
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-success ladda-button" data-style="zoom-out">回复</button>
+                        </div>
+                    </form>
+                    #include("./common/emoji.html")
+                    #else
+                    <div class="well text-center">
+                        <a href="${base_url('/signup')}">注册</a> 参与讨论 or <a href="${base_url('/signin')}">登录</a>
+                    </div>
+                    #end
+                </div>
+            </div><!-- /.panel add comment -->
+        </div><!-- /.col-md-8 -->
+        #include("./common/sidebar.html")
+    </div>
+</div>
+<script>hljs.initHighlightingOnLoad();</script>
+#include("./common/footer.html")
+<script type="text/javascript">
+    function doComment() {
+        jc.post({
+            url: '/topic/comment',
+            data: $('#comment-form').serialize(),
+            success: function (result) {
+                $('#comment-form')[0].reset();
+                $('#comment-form button').removeAttr('disabled');
+                if (result && result.success) {
+                    window.location.reload();
+                } else {
+                    if (result.code == 401) {
+                        go_signin();
+                    } else {
+                        jc.alertError(result.msg || '回复失败');
+                    }
+                }
+            }
+        });
+        return false;
+    }
+
+</script>
+</body>
+</html>

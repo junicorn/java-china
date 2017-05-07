@@ -1,0 +1,71 @@
+#include("./header.html", {active:'nodes', title:'节点管理'})
+<div class=main-content>
+    <div class="panel mb25">
+        <div class="panel-heading">节点列表</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="row">
+                    <div class="pull-left pl10">
+                        <label>
+                            <input type="search" class="form-control" placeholder="搜索...">
+                        </label>
+                        <a class="btn btn-icon-icon btn-sm btn-google-plus btn-round"><i class="fa fa-search"></i></a>
+                    </div>
+                    <div class="pull-right pr10">
+                        <a href="${base_url('/admin/nodes/add')}" type="button" class="btn btn-success">新增节点</a>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped mb0">
+                    <thead>
+                    <tr>
+                        <th>节点名称</th>
+                        <th>父节点</th>
+                        <th>子节点数</th>
+                        <th>帖子数</th>
+                        <th width="15%" align="center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #for(node : nodePage.list)
+                    <tr>
+                        <td>${node.node_name}</td>
+                        <td>${node.parent_name}</td>
+                        <td>${node.childs}</td>
+                        <td>${node.topics}</td>
+                        <td>
+                            <a href="${base_url('/admin/nodes/') + node.nid }" class="btn btn-info btn-outline btn-sm">编辑</a>
+                            <a href="javascript:;" class="btn btn-danger btn-outline btn-sm">删除</a>
+                        </td>
+                    </tr>
+                    #end
+                    </tbody>
+                </table>
+            </div>
+            #if(nodePage.pages > 1)
+            <div class="datatable-bottom pt10">
+                <div class="pull-left">
+                    <div class="dataTables_info" id="DataTables_Table_0_info"
+                         role="status" aria-live="polite">Showing 1 to 5 of 5 entries
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <div class="dataTables_paginate paging_bootstrap"
+                         id="DataTables_Table_0_paginate">
+                        <ul class="pagination no-margin">
+                            <li class="prev #if(nodePage.pageNum==1) disabled #end"><a
+                                    href="${base_url('/admin/nodes?p=') + nodePage.prevPage }" title="Previous">←</a>
+                            </li>
+                            <li class="active"><a href="#">${nodePage.pageNum}</a></li>
+                            <li class="next"><a href="${base_url('/admin/nodes?p=') + nodePage.nextPage }" title="Next">→</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            #end
+        </div>
+    </div>
+</div>
+#include("./footer.html")
+</body>
+</html>

@@ -1,0 +1,36 @@
+#include("./common/header.html", {title : '找回密码'})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="app layout-fixed-header bg-white usersession">
+                <div class="full-height">
+                    <div class=center-wrapper>
+                        <div class=center-content>
+                            #if(null == info)
+                            <div class="row no-margin col-md-8">
+                                <form role="form" action="${base_url('/forgot')}" class="form-layout" method="post"/>
+                                <p class="text-center mb25">请输入您的电子邮件地址, 您将收到一个链接来创建一个新的密码。</p>
+                                #if(null != error)
+                                <div class="alert alert-danger">${error}</div>
+                                #end
+                                <div class=form-inputs>
+                                    <input type="email" class="form-control input-lg" name="email"
+                                           placeholder="请输入您的电子邮件地址" autofocus required="required"/>
+                                </div>
+                                <button class="btn btn-success btn-lg btn-block" type=submit>找回密码</button>
+                                </form>
+                            </div>
+                            #else
+                            <div class="alert alert-success mt20 mr20 ml20">${info}</div>
+                            #end
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

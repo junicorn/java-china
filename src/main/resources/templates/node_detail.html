@@ -1,0 +1,102 @@
+#include("./common/header.html", {title : node.node_name})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading node-head" style="height: 100px;">
+                    <div>
+                        #if(null != node.pic && node.pic != '')
+                        <div class="pull-left mr10">
+                            <img width="73" height="73" src="${node.pic}" class="img-circle"/>
+                        </div>
+                        #end
+                        <div class="pull-left">
+                            <span>Java China › ${node.node_name}</span>
+                            <span>${node.content}</span>
+                            <p class="mt10 mb10">${node.description ?! ''}</p>
+                        </div>
+                    </div>
+                    <div class="pull-right text-right mr10">
+                        <span>帖子总数 ${node.topics}</span>
+                        #if(null != login_user)
+                        &nbsp;&nbsp;•&nbsp;
+                        #if(is_favorite)
+                        <a href="javascript:void(0);" nid="${node.nid}" class="favorite"><span>取消收藏</span></a>
+                        #else
+                        <a href="javascript:void(0);" nid="${node.nid}" class="favorite"><span>加入收藏</span></a>
+                        #end
+                        <p class="mt20">
+                            <a href="${base_url('/topic/add?pid=') + node.nid}" class="btn btn-primary btn-sm">发布新帖子</a>
+                        </p>
+                        #end
+                    </div>
+                </div>
+                <div class="panel-body home-panel">
+                    <div class="box-tab">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home">
+                                #if(null == topicPage.list || topicPage.list.size() == 0)
+                                <div class="alert alert-info alert-dismissable">
+                                    该节点下暂时还木有帖子呢 <i class="twa twa-lg twa-sparkles"></i>
+                                </div>
+                                #else
+                                <section class="widget bg-white post-comments">
+                                    #for(topic : topicPage.list)
+                                    <div class="media">
+                                        <a class="pull-left" href="${base_url('/member/') + topic.username}">
+                                            <img class="media-object avatar avatar-sm" src="${avatar_url(topic.avatar)}"
+                                                 alt="${topic.username}">
+                                        </a>
+                                        <div class="comment">
+                                            <div class="comment-author h6 no-margin">
+                                                #if(topic.comments > 0)
+                                                <div class="comment-meta small">
+                                                    <a href="${base_url('/topic/') + topic.tid + '#Reply' + topic.comments}"
+                                                       class="badge-comment">${topic.comments}</a>
+                                                </div>
+                                                <a href="${base_url('/topic/') + topic.tid + '#Reply' + topic.comments}">${topic.title}</a>
+                                                #end
+                                                <a href="${base_url('/topic/') + topic.tid}">${topic.title}</a>
+                                            </div>
+                                            <div class="comment-bt">
+                                                <span class="label label-default"><a
+                                                        href="${base_url('/go/') + topic.node_slug}">${topic.node_title}</a></span>
+                                                &nbsp;•&nbsp;
+                                                <strong><a href="${base_url('/member/') + topic.username}">${topic.username}</a></strong>
+                                                &nbsp;•&nbsp; <span>${timespan(topic.created)}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    #end
+                                </section>
+                                #end
+
+                                #if(topicPage.pages > 1)
+                                <ul class="pager">
+                                    #if(topicPage.pageNum > 1)
+                                    <li class="pull-left"><a
+                                            href="${base_url('/?tab=') + node.node_slug + '&p=' + topicPage.prevPage}">上一页</a>
+                                    </li>
+                                    #end
+                                    #if(topicPage.pages > 1 && topicPage.pageNum != topicPage.pages)
+                                    <li class="pull-right"><a
+                                            href="${base_url('/?tab=') + node.node_slug + '&p=' + topicPage.nextPage}">下一页</a>
+                                    </li>
+                                    #end
+                                </ul>
+                                #end
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.col-md-8 -->
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

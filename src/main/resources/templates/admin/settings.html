@@ -1,0 +1,60 @@
+#include("./header.html", {active:'options', title:'系统设置'})
+<div class=main-content>
+    <div class="panel mb25">
+        <div class="panel-heading border">系统设置</div>
+        <div class="panel-body">
+            <div class="row no-margin">
+                <div class="col-lg-12">
+                    <form id="setting_form" class="form-horizontal bordered-group" method="post" role="form"
+                          onsubmit="return save_settings();">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">站点名称</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="site_title"
+                                       placeholder="请输入站点名称" required="required" value="${options.site_title}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">站点关键词</label>
+                            <div class="col-sm-10">
+                                <input class="form-control"
+                                       placeholder="请输入关键词" required="required" value="${options.site_keywords}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">站点描述</label>
+                            <div class="col-sm-10">
+                                <input class="form-control"
+                                       placeholder="请输入站点描述" required="required" value="${options.site_description}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">开放注册</label>
+                            <div class="col-sm-10">
+                                <div class="checkbox">
+
+                                    <label>
+                                        #if(options.allow_signup=='false')
+                                        <input type="checkbox" name="allow_signup"/>开放
+                                        #else
+                                        <input type="checkbox" name="allow_signup" checked="checked"/>开放
+                                        #end
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">&nbsp;</label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-success">保存设置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+#include("./footer.html")
+</body>
+</html>

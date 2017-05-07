@@ -1,0 +1,225 @@
+#include("./common/header.html", {title:"个人设置"})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">用户编辑</h3>
+                </div>
+                <div class="panel-body">
+                    <form id="info_form" class="form-horizontal" role="form" onsubmit="return doSetting('#info_form')">
+
+                        <input type="hidden" name="type" value="info"/>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">用户名</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">${profile.username}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">电子邮件</label>
+                            <div class="col-sm-10">
+                                <input type="email" readonly="readonly" class="form-control input-sm"
+                                       value="${profile.email}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location" class="col-sm-2 control-label">职业</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control input-sm" id="jobs" name="jobs"
+                                       value="${profile.jobs}" placeholder="你的职业，比如Web开发者"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location" class="col-sm-2 control-label">所在地</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control input-sm" id="location" name="location"
+                                       value="${profile.location}" placeholder="输入你当前的坐标"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">个人主页</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control input-sm" placeholder="请输入你的站点地址"
+                                       id="web_site" name="web_site" value="${profile.web_site}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Github帐号</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control input-sm" id="github" name="github"
+                                       value="${profile.github}" placeholder="请输入你的github帐号(不是地址)"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">新浪微博帐号</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control input-sm" id="weibo" name="weibo"
+                                       value="${profile.weibo}" placeholder="请输入你的微博帐号(不是地址)"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signature" class="col-sm-2 control-label">签名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control input-sm" id="signature" name="signature"
+                                       value="${profile.signature}" placeholder="你的签名"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">个人简介</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="instructions" name="instructions" rows="3"
+                                          placeholder="来介绍下自己？">${profile.instructions}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success btn-sm submit" data-style="zoom-out">
+                                    <span class="ladda-label">保存信息</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">更换头像</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" id="avatar_form" onsubmit="return doSetting('#avatar_form')">
+                        <input type="hidden" name="type" value="avatar"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">当前头像</label>
+                            <div class="col-sm-10">
+                                <input type="hidden" id="user_avatar" name="avatar" value=""/>
+                                <img id="upload_img" alt="${profile.username}" src="${profile.avatar}"
+                                     width="73" height="73" onclick="doUpload()" style="cursor: pointer;"
+                                     class="img-circle"/>
+                                <input type="file" name="avatar" class="fileUpload ladda-button" data-style="zoom-out"
+                                       accept="image/png,image/jpg,image/jpeg" style="display: none;"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <br/>
+                                <button type="submit" class="btn btn-primary btn-sm">更换头像</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">修改密码</h3>
+                </div>
+                <div class="panel-body">
+                    <form id="pwd_form" class="form-horizontal" role="form" method="post"
+                          onsubmit="return doSetting('#pwd_form');">
+                        <input type="hidden" name="type" value="pwd"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">当前密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="curpwd" value="" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">新密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control input-sm" name="newpwd" value=""
+                                       required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">确认新密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control input-sm" name="renewpwd" value=""
+                                       required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-danger btn-sm">更改密码</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+<script type="text/javascript" src="/assets/scripts/jquery.liteuploader.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".fileUpload").liteUploader({
+            script: "${base_url('/uploadimg')}",
+            params: {type: 'avatar'},
+            rules: {
+                allowedFileTypes: "image/jpeg,image/png,image/jpeg",
+                maxSize: 512000
+            }
+        }).on("lu:success", function (e, result) {
+            if (result && result.success) {
+                var data = result.payload;
+                $("#upload_img").attr('src', data.url);
+                $("#user_avatar").val(data.savepath);
+            } else {
+                if (result.code == 401) {
+                    go_signin();
+                } else {
+                    jc.alertError(result.msg || "上传失败");
+                }
+            }
+        }).on("lu:errors", function (e, data) {
+            console.log(data);
+            if (data && data.length > 0) {
+                var item = data[0];
+                if (item && item.errors && item.errors.length > 0) {
+                    var err = item.errors[0];
+                    if (err.type == 'size') {
+                        jc.alertError("图片大小超出限制,请重新上传");
+                    }
+                }
+            }
+        });
+
+        $(".fileUpload").change(function () {
+            $(this).data("liteUploader").startUpload();
+        });
+    });
+
+    /**
+     * 个人设置
+     * @returns {boolean}
+     */
+    function doSetting(formId) {
+        jc.post({
+            url: BASE + '/options',
+            data: $(formId).serialize(),
+            success: function (result) {
+                if (result && result.success) {
+                    jc.alertOkAndReload('保存成功');
+                } else {
+                    if (result.code == 401) {
+                        go_signin();
+                    } else {
+                        jc.alertError(result.msg || '保存失败');
+                    }
+                }
+            }
+        });
+        return false;
+    }
+
+    //上传方法
+    function doUpload() {
+        $(".fileUpload").click();
+    }
+</script>
+</body>
+</html>

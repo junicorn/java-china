@@ -1,0 +1,39 @@
+#include("./common/header.html", {title : '我收藏的帖子'})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <h3 class="panel-title">我收藏的帖子</h3>
+                    </div>
+                    <div class="pull-right">
+                        帖子总数&nbsp;${favoritesPage.total ?! 0}
+                    </div>
+                </div>
+                <div class="panel-body essence">
+                    #if(null != favoritesPage)
+                    #for(topic : favoritesPage.list)
+                    <div class="panel panel-default" style="border: none;">
+                        <div class="panel-body">
+                            <i class="fa fa-heart"></i> <a href="${base_url('/topic/') + topic.tid}">${topic.title}</a>
+                            <p class="pull-right">
+					  		<span class="label label-default">
+					  			<a href="${base_url('/go/') + topic.node_slug}">${topic.node_name}</a>
+					  		</span>
+                            </p>
+                        </div>
+                    </div>
+                    #end
+                    #else
+                    <div class="alert alert-info">嗨，${login_user.user_name}！你还没有收藏的帖子。</div>
+                    #end
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

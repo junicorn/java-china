@@ -1,0 +1,115 @@
+#include("./header.html", {active:'links', title:'友链管理'})
+<div class=main-content>
+    <div class="panel mb25">
+        <div class="panel-heading">友链列表</div>
+
+        <div class="modal link-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class=modal-dialog>
+                <div class=modal-content>
+                    <form action="" role="form">
+                        <div class=modal-header>
+                            <button type=button class=close data-dismiss=modal aria-hidden=true>×</button>
+                            <h4 class=modal-title>添加友链</h4>
+                        </div>
+                        <div class=modal-body>
+                            <div class="row mb25">
+                                <div class=col-xs-6>
+                                    <label>标题</label>
+                                    <input class=form-control placeholder="请输入标题" required="required"/>
+                                </div>
+                            </div>
+                            <div class="row mb25">
+                                <div class=col-xs-6>
+                                    <label>链接地址</label>
+                                    <input class=form-control placeholder="请输入链接地址" required="required"/>
+                                </div>
+                            </div>
+                            <div class="row mb25">
+                                <div class=col-xs-6>
+                                    <label>链接图标</label>
+                                    <input type="file">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer no-border">
+                            <button type="button" class="btn btn-default" data-dismiss=modal>取消</button>
+                            <button type="submit" class="btn btn-primary">添加</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="row">
+                    <div class="pull-left pl10">
+                        <label>
+                            <input type="search" class="form-control" placeholder="搜索...">
+                        </label>
+                        <a class="btn btn-icon-icon btn-sm btn-google-plus btn-round"><i class="fa fa-search"></i></a>
+                    </div>
+                    <div class="pull-right pr10">
+                        <button data-toggle="modal" data-target=".link-modal" type="button" class="btn btn-success">
+                            添加友链
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped mb0">
+                    <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>链接地址</th>
+                        <th>链接图标</th>
+                        <th>链接次序</th>
+                        <th width="15%" align="center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            王爵的技术博客
+                        </td>
+                        <td>
+                            <a href="" class="" target="_blank">https://biezhi.me</a>
+                        </td>
+                        <td>
+                            无
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="btn btn-danger btn-outline btn-sm">上移</a>
+                            <a href="javascript:;" class="btn btn-danger btn-outline btn-sm">下移</a>
+                            <a href="javascript:;" class="btn btn-danger btn-outline btn-sm">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            开源中国
+                        </td>
+                        <td>
+                            <a href="" class="" target="_blank">http://www.oschina.net</a>
+                        </td>
+                        <td>
+                            <img src="http://www.oschina.net/img/logo.gif"/>
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="btn btn-danger btn-outline btn-sm">上移</a>
+                            <a href="javascript:;" class="btn btn-danger btn-outline btn-sm">下移</a>
+                            <a href="javascript:;" class="btn btn-danger btn-outline btn-sm">删除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+#include("./footer.html")
+</body>
+</html>

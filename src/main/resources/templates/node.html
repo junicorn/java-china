@@ -1,0 +1,43 @@
+#include("./common/header.html", {site_title:"所有节点"})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><a href="${base_url('')}">首页</a> / 所有节点</h3>
+                </div>
+                <div class="panel-body">
+                    #for(node : nodes)
+                    #if(node.pid == 0 && null != node.children)
+                    <div class="row">
+                        <div class="col-sm-2">${node.nname}</div>
+                        <div class="col-sm-10"><p>
+                            #for(nodeitem : node.children)
+                            <a href="${base_url('/go/') + nodeitem.nkey}" class="btn btn-default btn-xs nodes"
+                               role="button">${nodeitem.nname}</a>
+                            #end
+                        </p></div>
+                    </div>
+                    #end
+                    #end
+
+                    <div class="row">
+                        <div class="col-sm-offset-2 col-sm-10"><p>
+
+                            #for(node : nodes)
+                            #if(node.pid == 0 && null == node.children)
+                            <a href="${base_url('/go/') + node.nkey}" class="btn btn-default btn-xs nodes"
+                               role="button">${node.nname}</a>
+                            #end
+                            #end
+                        </p></div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.col-md-8 -->
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+</body>
+</html>

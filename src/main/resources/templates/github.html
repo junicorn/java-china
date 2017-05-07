@@ -1,0 +1,85 @@
+#include("./common/header.html", {active:"signin", title:"Github 账号绑定"})
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div id="result" class="alert alert-success mt20 mr20 ml20 hide"></div>
+            <div class="col-md-6 app layout-fixed-header bg-white usersession">
+                <div class="full-height">
+                    <div class=center-wrapper>
+                        <div class=center-content>
+                            <div class="row no-margin col-md-8">
+                                <ul id="github-bind-tab" class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active">
+                                        <a href="#signup" id="signup-tab" role="tab" data-toggle="tab"
+                                           aria-controls="signup" aria-expanded="true">绑定新账号</a>
+                                    </li>
+                                    <li role="presentation" class="">
+                                        <a href="#signin" role="tab" id="signin-tab" data-toggle="tab"
+                                           aria-controls="signin" aria-expanded="false">绑定已有帐号</a>
+                                    </li>
+                                </ul>
+                                <div id="github-tab-content" class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade active in" id="signup"
+                                         aria-labelledby="signup-tab">
+                                        <form id="github_signup_form" role="form" class="form-layout" method="post"
+                                              onsubmit="return github.signup();">
+                                            <div class=form-inputs>
+                                                <div class="input-group mb15">
+                                                    <span class="input-group-addon">用户名</span>
+                                                    <input type="text" id="login_name" class="form-control input-lg"
+                                                           placeholder="请使用半角的 a-z 或数字 0-9" required="required"
+                                                           value=""/>
+                                                </div>
+                                                <div class="input-group mb15">
+                                                    <span class="input-group-addon">邮　箱</span>
+                                                    <input type="email" id="email" class="form-control input-lg"
+                                                           placeholder="请使用真实电子邮箱注册，我们不会将你的邮箱地址分享给任何人"
+                                                           required="required" value=""/>
+                                                </div>
+                                                <div class="input-group mb15">
+                                                    <span class="input-group-addon">密　码</span>
+                                                    <input type="password" id="pass_word" class="form-control input-lg"
+                                                           placeholder="请输入6-20位密码" required="required"/>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-success btn-block btn-lg mb15" type="submit">
+                                                注册并绑定账号
+                                            </button>
+                                            </p>
+                                        </form>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="signin" aria-labelledby="signin-tab">
+                                        <form id="github_signin_form" role="form" class="form-layout" method="post"
+                                              onsubmit="return github.signin();"/>
+                                        <div class=form-inputs>
+                                            <input type="hidden" name="open_id" value="${open_id}"/>
+                                            <input type="text" class="form-control input-lg" id="login_name"
+                                                   placeholder="请输入账号或者邮箱" required="required" value=""/>
+                                            <input type="password" class="form-control input-lg" id="pass_word"
+                                                   placeholder="请输入登录密码" required="required"/>
+                                        </div>
+                                        <button class="btn btn-success btn-block btn-lg mb15" type="submit">
+                                            <span>绑定并登录</span>
+                                        </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        #include("./common/sidebar.html")
+    </div>
+</div>
+#include("./common/footer.html")
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script>
+    $('#github-bind-tab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show');
+    });
+</script>
+</body>
+</html>
